@@ -5,6 +5,7 @@ const initialState = {
   language: "",
   loading: false,
   error: null,
+  currentState: null,
 };
 
 const repoFinderSlice = createSlice({
@@ -25,6 +26,7 @@ const repoFinderSlice = createSlice({
     fetchRepoSuccess: (state, action) => {
       state.repos = action.payload;
       state.loading = false;
+      state.currentState = Math.floor(Math.random);
     },
 
     fetchRepoFailure: (state, action) => {

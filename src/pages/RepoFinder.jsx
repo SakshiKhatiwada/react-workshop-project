@@ -1,4 +1,6 @@
 import DropDown from "../components/DropDown";
+import "../styles/RepoStyle.css";
+import { FaGithub } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
@@ -8,6 +10,7 @@ import {
 } from "../slices/repoFinderSlice";
 import { fetchRepository } from "../api/repo";
 import RepoCard from "../components/RepoCard";
+import { useState } from "react";
 
 const RepoFinder = () => {
   const dispatch = useDispatch();
@@ -30,7 +33,9 @@ const RepoFinder = () => {
 
   return (
     <div className="repo-finder-container">
-      <h1>Github Repository Finder</h1>
+      <h1>
+        <FaGithub /> Github Repository Finder
+      </h1>
 
       <div className="head">
         <DropDown />
@@ -46,8 +51,10 @@ const RepoFinder = () => {
       </div>
 
       {error && (
-        <div className="status-message status">
-          {error}
+        <div className="error-box">
+          <div className="status-message status">
+            <p className="error-msg">{error}</p>
+          </div>
           <button onClick={handleFetch} className="find-button">
             Retry
           </button>
@@ -56,6 +63,7 @@ const RepoFinder = () => {
 
       {/* Repo Card */}
       <div className="repo-container">
+        {console.log(repos, "repos")}
         {repos?.slice(0, 5).map((repo, index) => {
           return (
             <RepoCard
@@ -67,7 +75,9 @@ const RepoFinder = () => {
               url={repo?.html_url}
             />
           );
+          s;
         })}
+       
       </div>
     </div>
   );
