@@ -7,16 +7,16 @@ import {
   fetchRepoRequest,
   fetchRepoFailure,
   fetchRepoSuccess,
+  setPage,
 } from "../slices/repoFinderSlice";
 import { fetchRepository } from "../api/repo";
 import RepoCard from "../components/RepoCard";
-import { useState } from "react";
+import Pagination from "../components/pagination";
 
 const RepoFinder = () => {
   const dispatch = useDispatch();
-  const { repos, language, loading, error } = useSelector(
-    (state) => state.repoFinder
-  );
+  const { repos, page, perPage, totalCount, language, loading, error } =
+    useSelector((state) => state.repoFinder);
 
   const handleFetch = async () => {
     if (!language) {
@@ -24,10 +24,20 @@ const RepoFinder = () => {
     }
     dispatch(fetchRepoRequest());
     try {
-      const repos = await fetchRepository(language);
+      const repos = await fetchRepository(language, 1, 9); //lang, page, per page
       dispatch(fetchRepoSuccess(repos));
     } catch (error) {
       dispatch(fetchRepoFailure(error?.message || "Failed to fetch"));
+    }
+  };
+
+  const handlePageChangeClick = (newPage) => {
+    if (newPage > 0 && newPage < Math.ceil(totalCount / perPage)) {
+      {
+        console.log("newpage", newPage, totalCount);
+        dispatch(setPage(newPage));
+        handleFetch();
+      }
     }
   };
 
@@ -62,9 +72,10 @@ const RepoFinder = () => {
       )}
 
       {/* Repo Card */}
+
       <div className="repo-container">
-        {console.log(repos, "repos")}
-        {repos?.slice(0, 5).map((repo, index) => {
+        {/* {console.log(repos, "repos")} */}
+        {repos?.map((repo, index) => {
           return (
             <RepoCard
               key={index}
@@ -77,8 +88,15 @@ const RepoFinder = () => {
           );
           s;
         })}
-       
       </div>
+
+      {/* Pagination Control */}
+      <Pagination
+        page={page}
+        perPage={perPage}
+        totalCount={totalCount}
+        handlePageChangeClick={handlePageChangeClick}
+      />
     </div>
   );
 };

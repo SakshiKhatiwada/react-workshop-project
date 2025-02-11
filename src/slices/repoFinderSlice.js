@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  items: [],
+  page: 1,
+  perPage: 8,
+  totalCount: 0,
   repos: null,
   language: "",
   loading: false,
@@ -16,6 +20,11 @@ const repoFinderSlice = createSlice({
       state.language = action.payload;
       state.repos = null;
       state.error = null;
+    },
+
+    setPage: (state, action) => {
+      console.log(state, action, "state,action");
+      state.page = action.payload;
     },
 
     fetchRepoRequest: (state) => {
@@ -41,6 +50,7 @@ export const {
   fetchRepoFailure,
   fetchRepoRequest,
   fetchRepoSuccess,
+  setPage,
 } = repoFinderSlice.actions;
 
 export default repoFinderSlice.reducer;
